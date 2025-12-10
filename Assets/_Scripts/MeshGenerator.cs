@@ -134,15 +134,13 @@ public class MeshGenerator : MonoBehaviour
         return Mathf.Sin(freqX * x) + Mathf.Cos(freqZ * z) + crossStrength * Mathf.Sin(x + z);
     }
 
-    // Returns the gradient vector (df/dx, df/dz) at world-space (x,z)
     public Vector2 Gradient(float x, float z)
     {
-        float h = 0.01f;
-        float fx = Evaluate(x, z);
-        float dfdx = (Evaluate(x + h, z) - fx) / h;
-        float dfdz = (Evaluate(x, z + h) - fx) / h;
+        float dfdx = freqX * Mathf.Cos(freqX * x) + crossStrength * Mathf.Cos(x + z);
+        float dfdz = -freqZ * Mathf.Sin(freqZ * z) + crossStrength * Mathf.Cos(x + z);
         return new Vector2(dfdx, dfdz);
     }
+
 
     public float GetHeight(float x, float z)
     {

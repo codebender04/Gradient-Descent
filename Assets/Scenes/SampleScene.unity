@@ -419,7 +419,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 131909866}
-  m_Mesh: {fileID: 892526986}
+  m_Mesh: {fileID: 889361054}
 --- !u!4 &131909871
 Transform:
   m_ObjectHideFlags: 0
@@ -456,7 +456,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 892526986}
+  m_Mesh: {fileID: 889361054}
 --- !u!1 &150412007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,7 +2006,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 792599014}
   m_CullTransparentMesh: 1
---- !u!43 &892526986
+--- !u!43 &889361054
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3858,7 +3858,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: F(x,z) = sin(2x) + cos(2z) + sin(x + z)
+  m_text: J(x,z) = sin(2x) + cos(2z) + sin(x + z)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

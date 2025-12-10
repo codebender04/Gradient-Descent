@@ -39,7 +39,7 @@ public class CostFunctionManager : MonoBehaviour
         string bStr = FormatParameter(sliderB.value, "z");
         string cStr = FormatParameter(sliderC.value, "");
 
-        costFunctionText.text = $"F(x,z) = sin({aStr}) + cos({bStr}) + {cStr}sin(x + z)";
+        costFunctionText.text = $"J(x,z) = sin({aStr}) + cos({bStr}) + {cStr}sin(x + z)";
     }
     private string FormatParameter(float value, string variable)
     {

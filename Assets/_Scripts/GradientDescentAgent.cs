@@ -139,6 +139,7 @@ public class GradientDescentAgent : MonoBehaviour
     }
     private void OnDestroy()
     {
+        if (agentInfoUI == null) return;
         Destroy(agentInfoUI.gameObject);
     }
 }

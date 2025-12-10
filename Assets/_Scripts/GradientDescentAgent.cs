@@ -123,7 +123,7 @@ public class GradientDescentAgent : MonoBehaviour
     {
         if (lineRenderer == null) return;
         trail.Add(pos);
-        //if (trail.Count > maxTrailPoints) trail.RemoveAt(0);
+        if (trail.Count > maxTrailPoints) trail.RemoveAt(0);
         lineRenderer.positionCount = trail.Count;
         lineRenderer.SetPositions(trail.ToArray());
     }

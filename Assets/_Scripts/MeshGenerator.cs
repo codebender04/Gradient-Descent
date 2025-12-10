@@ -144,14 +144,11 @@ public class MeshGenerator : MonoBehaviour
         return new Vector2(dfdx, dfdz);
     }
 
-
-    // Convenience: sample surface y at a world point (x,z) relative to this transform
     public float GetHeight(float x, float z)
     {
         return Evaluate(x, z) * heightScale + transform.position.y;
     }
 
-    // Optionally draw gizmos to show the grid bounds
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

@@ -3,6 +3,7 @@
 // Gradient descent agent that lives on the surface
 // --------------------------------------------------
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Transform))]
@@ -15,6 +16,12 @@ public class GradientDescentAgent : MonoBehaviour
     [Header("Time Settings")]
     [SerializeField] private float stepInterval = 0.1f; // seconds per gradient update
 
+    [Header("Optimization")]
+    [SerializeField] private bool useMomentum = false;
+    [SerializeField] private float momentum = 0.9f;
+
+    private Vector2 velocity = Vector2.zero;
+
     private MeshGenerator surface;
     private float learningRate = 0.1f; // step size
     private float stepTimer = 0f;
@@ -23,15 +30,19 @@ public class GradientDescentAgent : MonoBehaviour
     private bool isRunning = false;
     private float startX = 0f;
     private float startZ = 0f;
+    private AgentInfoUI agentInfoUI;
     // internal xz state in surface-local coordinates
     private Vector2 xz;
 
-    public void OnInstatiated(MeshGenerator surface, float startX, float startZ, float learningRate)
+    public void OnInstatiated(MeshGenerator surface, float startX, float startZ, float learningRate, bool useMomentum, AgentInfoUI agentInfoUI)
     {
         this.surface = surface;
         this.startX = startX;
         this.startZ = startZ;
         this.learningRate = learningRate;
+        this.useMomentum = useMomentum;
+        this.agentInfoUI = agentInfoUI;
+
 
         xz = new Vector2(startX, startZ);
         transform.position = ToWorldPos(xz);
@@ -42,6 +53,8 @@ public class GradientDescentAgent : MonoBehaviour
         lineRenderer.positionCount = 0;
         lineRenderer.widthMultiplier = 0.05f;
         lineRenderer.material = visual.material;
+
+        agentInfoUI.Initialize(visual.material.color, xz, surface.Gradient(xz.x, xz.y));
     }
     private void Update()
     {
@@ -65,12 +78,23 @@ public class GradientDescentAgent : MonoBehaviour
 
     public void NextStep()
     {
-        // compute gradient at current xz
         Vector2 gradient = surface.Gradient(xz.x, xz.y);
 
-        // gradient descent moves against the gradient
-        xz -= learningRate * gradient;
+        if (useMomentum)
+        {
+            // Momentum update
+            velocity = momentum * velocity - learningRate * gradient;
+            xz += velocity;
+        }
+        else
+        {
+            // Standard GD
+            xz -= learningRate * gradient;
+        }
+
+        agentInfoUI.UpdatePositionAndGradient(xz, gradient);
     }
+
     public void Run()
     {
         isRunning = true;
@@ -83,7 +107,10 @@ public class GradientDescentAgent : MonoBehaviour
     {
         this.learningRate = learningRate;
     }
-
+    public void SetUseMomentum(bool useMomentum)
+    {
+        this.useMomentum = useMomentum;
+    }
     private Vector3 ToWorldPos(Vector2 xzLocal)
     {
         // The MeshGenerator uses coordinates relative to its transform's local origin
@@ -96,17 +123,22 @@ public class GradientDescentAgent : MonoBehaviour
     {
         if (lineRenderer == null) return;
         trail.Add(pos);
-        if (trail.Count > maxTrailPoints) trail.RemoveAt(0);
+        //if (trail.Count > maxTrailPoints) trail.RemoveAt(0);
         lineRenderer.positionCount = trail.Count;
         lineRenderer.SetPositions(trail.ToArray());
     }
-
-    // Editor helpers
     public void ResetToStart()
     {
+        velocity = Vector2.zero;
         xz = new Vector2(startX, startZ);
         trail.Clear();
         if (lineRenderer != null) lineRenderer.positionCount = 0;
         transform.position = ToWorldPos(xz);
+
+        agentInfoUI.UpdatePositionAndGradient(xz, surface.Gradient(xz.x, xz.y));
+    }
+    private void OnDestroy()
+    {
+        Destroy(agentInfoUI.gameObject);
     }
 }

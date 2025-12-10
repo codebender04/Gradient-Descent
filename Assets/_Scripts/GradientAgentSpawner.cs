@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,10 @@ public class GradientAgentSpawner : MonoBehaviour
     [SerializeField] private MeshGenerator surface;
     [SerializeField] private GradientDescentAgent agentPrefab;
     [SerializeField] private Slider learningRateSlider;
+    [SerializeField] private bool useMomentum = false;
+    [SerializeField] private TextMeshProUGUI momentumText;
+    [SerializeField] private AgentInfoUI agentInfoUI;
+    [SerializeField] private Transform agentInfoContainer;
 
     private Camera cam;
     private List<GradientDescentAgent> gradientDescentAgentList = new();
@@ -39,7 +44,7 @@ public class GradientAgentSpawner : MonoBehaviour
         Vector3 local = worldPoint - surface.transform.position;
 
         GradientDescentAgent agent = Instantiate(agentPrefab);
-        agent.OnInstatiated(surface, local.x, local.z, learningRateSlider.value);
+        agent.OnInstatiated(surface, local.x, local.z, learningRateSlider.value, useMomentum, Instantiate(agentInfoUI, agentInfoContainer));
         agent.ResetToStart();
         gradientDescentAgentList.Add(agent);
     }
@@ -80,6 +85,15 @@ public class GradientAgentSpawner : MonoBehaviour
             Destroy(agent.gameObject);
         }
         gradientDescentAgentList.Clear();
+    }
+    public void ToggleMomentum()
+    {
+        useMomentum = !useMomentum;
+        foreach (GradientDescentAgent agent in gradientDescentAgentList)
+        {
+            agent.SetUseMomentum(useMomentum);
+        }
+        momentumText.text = useMomentum ? "MOMENTUM" : "VANILLA";
     }
     private void SetLearningRate(float value)
     {

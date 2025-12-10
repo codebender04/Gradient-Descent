@@ -45,15 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ef0279bc0cc6541bd9aaba17f8df54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surface: {fileID: 0}
-  startX: 0
-  startZ: 0
-  learningRate: 0.1
-  run: 0
-  projectToSurface: 1
-  drawTrail: 1
   maxTrailPoints: 500
   visual: {fileID: 3515475363689873057}
+  infoText: {fileID: 0}
+  infoCanvasTransform: {fileID: 0}
+  stepInterval: 0.1
+  useMomentum: 0
+  momentum: 0.9
 --- !u!1 &7111813747141322332
 GameObject:
   m_ObjectHideFlags: 0
